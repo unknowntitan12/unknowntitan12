@@ -1,0 +1,36 @@
+title: "unknowntitan12"
+description: "ICT1012 OS lab solutions, study guides, and prediction questions"
+baseurl: ""
+url: "https://unknowntitan12.github.io"
+
+theme: null
+markdown: kramdown
+highlighter: rouge
+
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+
+collections:
+  os_notes:
+    output: true
+    permalink: /os_notes/:name/
+  predictions:
+    output: true
+    permalink: /predictions/:name/
+
+defaults:
+  - scope:
+      path: ""
+      type: "os_notes"
+    values:
+      layout: "page"
+  - scope:
+      path: ""
+      type: "predictions"
+    values:
+      layout: "page"

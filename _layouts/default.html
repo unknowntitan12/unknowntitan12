@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% if page.title %}{{ page.title }} — {% endif %}{{ site.title }}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', () => hljs.highlightAll());</script>
+  <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}" />
+</head>
+<body>
+
+  <!-- SCANLINE OVERLAY -->
+  <div class="scanlines" aria-hidden="true"></div>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <a href="{{ '/' | relative_url }}" class="brand-link">
+        <div class="brand-mark">
+          <span class="brand-mark-inner">UT</span>
+        </div>
+        <div class="brand-text">
+          <div class="brand-name">unknowntitan12</div>
+          <div class="brand-sub">ICT1012 · xv6-riscv</div>
+        </div>
+      </a>
+      <div class="terminal-prompt">
+        <span class="prompt-user">root</span><span class="prompt-at">@</span><span class="prompt-host">xv6</span><span class="prompt-colon">:</span><span class="prompt-path">~</span><span class="prompt-dollar">$</span>
+        <span class="cursor-block"></span>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+
+      <a href="{{ '/' | relative_url }}" class="nav-item {% if page.url == '/' %}active{% endif %}">
+        <span class="nav-glyph">⌂</span>
+        <span class="nav-label">Home</span>
+      </a>
+
+      <div class="nav-group-label"><span class="nl-slash">//</span> Lab 1</div>
+      {% assign lab1 = site.os_notes | where: "lab", "lab1" | sort: "order" %}
+      {% for note in lab1 %}
+      <a href="{{ note.url | relative_url }}" class="nav-item {% if page.url == note.url %}active{% endif %}">
+        <span class="nav-glyph">›</span>
+        <span class="nav-label">{{ note.short_title | default: note.title }}</span>
+      </a>
+      {% endfor %}
+
+      <div class="nav-group-label"><span class="nl-slash">//</span> Lab 2</div>
+      {% assign lab2 = site.os_notes | where: "lab", "lab2" | sort: "order" %}
+      {% for note in lab2 %}
+      <a href="{{ note.url | relative_url }}" class="nav-item {% if page.url == note.url %}active{% endif %}">
+        <span class="nav-glyph">›</span>
+        <span class="nav-label">{{ note.short_title | default: note.title }}</span>
+      </a>
+      {% endfor %}
+
+      <div class="nav-group-label"><span class="nl-slash">//</span> Lab 3</div>
+      {% assign lab3 = site.os_notes | where: "lab", "lab3" | sort: "order" %}
+      {% for note in lab3 %}
+      <a href="{{ note.url | relative_url }}" class="nav-item {% if page.url == note.url %}active{% endif %}">
+        <span class="nav-glyph">›</span>
+        <span class="nav-label">{{ note.short_title | default: note.title }}</span>
+      </a>
+      {% endfor %}
+
+      <div class="nav-group-label">
+        <span class="nl-slash">//</span> Predictions
+        {% assign pred_count = site.predictions | size %}
+        {% if pred_count > 0 %}
+        <span class="nav-count">{{ pred_count }}</span>
+        {% endif %}
+      </div>
+      {% assign preds = site.predictions | sort: "title" %}
+      {% for pred in preds %}
+      <a href="{{ pred.url | relative_url }}" class="nav-item pred-item {% if page.url == pred.url %}active{% endif %}">
+        <span class="nav-glyph">★</span>
+        <span class="nav-label">{{ pred.title }}</span>
+      </a>
+      {% endfor %}
+      {% if preds.size == 0 %}
+      <div class="nav-item disabled">
+        <span class="nav-glyph">_</span>
+        <span class="nav-label">None yet</span>
+      </div>
+      {% endif %}
+
+    </nav>
+
+    <div class="sidebar-foot">
+      <div class="sf-status">
+        <span class="sf-dot"></span> ONLINE
+      </div>
+      <div class="sf-url">unknowntitan12.github.io</div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <div class="main-wrap">
+
+    <header class="topbar">
+      <button class="hamburger" onclick="document.getElementById('sidebar').classList.toggle('open')" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="breadcrumb">
+        <a href="{{ '/' | relative_url }}">~/unknowntitan12</a>
+        {% if page.title %}
+        <span class="bc-sep"> / </span>
+        <span class="bc-current">{{ page.title }}</span>
+        {% endif %}
+      </div>
+      <div class="topbar-badges">
+        <span class="tb-badge">xv6-riscv</span>
+        <span class="tb-live"><span class="live-dot"></span>live</span>
+      </div>
+    </header>
+
+    <main class="page-main">
+      {% if page.title %}
+      <div class="page-header">
+        <h1 class="page-title">{{ page.title }}</h1>
+        <div class="page-tags">
+          {% if page.lab %}<span class="ptag lab">{{ page.lab | upcase }}</span>{% endif %}
+          {% if page.week %}<span class="ptag week">WK{{ page.week }}</span>{% endif %}
+          {% if page.collection == "predictions" %}<span class="ptag pred">★ PREDICTION</span>{% endif %}
+          {% if page.date %}<span class="ptag date">{{ page.date | date: "%d %b %Y" }}</span>{% endif %}
+        </div>
+      </div>
+      {% endif %}
+
+      <div class="page-body">
+        {{ content }}
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <span>unknowntitan12</span>
+      <span class="ft-sep">·</span>
+      <span>ICT1012 Operating Systems</span>
+      <span class="ft-sep">·</span>
+      <a href="https://unknowntitan12.github.io">unknowntitan12.github.io</a>
+    </footer>
+
+  </div><!-- /main-wrap -->
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+      // ── Answer reveal toggles ──
+      document.querySelectorAll('.answer-toggle').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          var body = this.nextElementSibling;
+          if (body && body.classList.contains('answer-body')) {
+            var open = body.classList.toggle('open');
+            this.innerHTML = open ? '▲ &nbsp;Collapse answer' : '▼ &nbsp;Reveal answer';
+            if (open) {
+              body.querySelectorAll('pre code').forEach(function (el) {
+                hljs.highlightElement(el);
+              });
+            }
+          }
+        });
+      });
+
+      // ── Close sidebar on outside tap (mobile) ──
+      document.addEventListener('click', function (e) {
+        var sb = document.getElementById('sidebar');
+        if (sb.classList.contains('open') &&
+            !sb.contains(e.target) &&
+            !e.target.closest('.hamburger')) {
+          sb.classList.remove('open');
+        }
+      });
+
+    });
+  </script>
+</body>
+</html>
